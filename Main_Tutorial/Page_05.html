@@ -1,0 +1,426 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SHD-CCP: 16-Stream Physical Pathing</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <!-- MathJax -->
+    <script>
+    window.MathJax = {
+      tex: { inlineMath: [['$', '$'], ['\\(', '\\)']] },
+      svg: { fontCache: 'global' }
+    };
+    </script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+    <style>
+        body { background-color: #020617; color: #cbd5e1; font-family: 'Segoe UI', sans-serif; line-height: 1.8; overflow-x: hidden; }
+        
+        .glass-panel {
+            background: rgba(15, 23, 42, 0.7);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(56, 189, 248, 0.15);
+            border-radius: 12px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.5);
+            position: relative;
+            z-index: 10;
+        }
+
+        h1 { font-size: 2.2rem; font-weight: 800; color: #38bdf8; text-transform: uppercase; letter-spacing: 0.05em; text-shadow: 0 0 20px rgba(56, 189, 248, 0.4); }
+        h2 { font-size: 1.5rem; color: #facc15; font-weight: 700; margin-top: 1.5rem; border-bottom: 1px solid #334155; padding-bottom: 0.5rem; }
+        h3 { font-size: 1.1rem; color: #e2e8f0; font-weight: 600; margin-top: 1rem; }
+        
+        .math-block {
+            background: rgba(0,0,0,0.4);
+            border-left: 3px solid #facc15;
+            padding: 1rem;
+            font-family: 'Courier New', monospace;
+            margin: 1rem 0;
+            color: #e2e8f0;
+            font-size: 0.9em;
+        }
+
+        #loom-viz {
+            display: grid;
+            grid-template-columns: 250px 1fr 250px;
+            gap: 1rem;
+            height: 500px;
+            background: #000;
+            border: 1px solid #334155;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+        
+        canvas { width: 100%; height: 100%; display: block; }
+        
+        .panel-label {
+            position: absolute; top: 10px; left: 10px; 
+            background: rgba(0,0,0,0.7); color: #94a3b8; 
+            font-size: 10px; padding: 4px; border-radius: 4px;
+            font-family: monospace; border: 1px solid #334155;
+        }
+    </style>
+</head>
+<body class="p-4 md:p-12">
+
+    <main class="max-w-6xl mx-auto">
+        
+        <header class="text-center mb-12">
+            <div class="inline-block px-3 py-1 mb-4 border border-blue-500/30 rounded-full text-xs font-mono text-blue-400 bg-blue-900/20">SHD-CCP PHYSICAL LAYER</div>
+            <h1>16-Stream Physical Pathing</h1>
+            <p class="text-xl text-slate-400">Achieving 1:1 Algorithmic Equality via Torsion-Corrected Traces</p>
+        </header>
+
+        <!-- SECTION 1: THE DIVISION PROBLEM -->
+        <section class="glass-panel">
+            <h2>1. The Path Length Inequality Problem</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <div>
+                    <p>We begin with the 64-bit Einstein Cube ($4 \times 4 \times 4$). To transmit this serially without losing the cubic topology, we extrude it into <strong>16 Parallel Data Streams</strong> (the Z-axis columns).</p>
+                    <p class="mt-2"><strong>The Challenge:</strong> When these 16 streams travel along a curved manifold (like a Torus or Trefoil), geometry dictates that the <em>inner tracks</em> are shorter than the <em>outer tracks</em>.</p>
+                    <div class="math-block">
+                        $$ L_{inner} = 2\pi(R - r) \quad < \quad L_{outer} = 2\pi(R + r) $$
+                    </div>
+                    <p class="text-sm text-red-400 font-bold">Consequence: Over millions of cycles, this path difference ($\Delta L$) causes "Compounding Phase Loss." The cube shears apart, and data synchronization is lost.</p>
+                </div>
+                <div class="bg-slate-900/50 p-4 rounded border border-slate-700">
+                    <h3 class="!mt-0 text-blue-400">The 16-Stream Configuration</h3>
+                    <p class="text-sm text-slate-300 mb-4">The streams are not arranged flat, but in a <strong>Keystone Trace</strong> configuration to fit the arch of the manifold.</p>
+                    <!-- CSS Grid representation of 4x4 -->
+                    <div class="grid grid-cols-4 gap-1 w-32 h-32 mx-auto">
+                        <!-- Generate 16 boxes -->
+                        <div class="bg-blue-500/80 rounded"></div><div class="bg-blue-500/80 rounded"></div><div class="bg-blue-500/80 rounded"></div><div class="bg-blue-500/80 rounded"></div>
+                        <div class="bg-cyan-500/80 rounded"></div><div class="bg-cyan-500/80 rounded"></div><div class="bg-cyan-500/80 rounded"></div><div class="bg-cyan-500/80 rounded"></div>
+                        <div class="bg-teal-500/80 rounded"></div><div class="bg-teal-500/80 rounded"></div><div class="bg-teal-500/80 rounded"></div><div class="bg-teal-500/80 rounded"></div>
+                        <div class="bg-emerald-500/80 rounded"></div><div class="bg-emerald-500/80 rounded"></div><div class="bg-emerald-500/80 rounded"></div><div class="bg-emerald-500/80 rounded"></div>
+                    </div>
+                    <p class="text-xs text-center mt-2 text-slate-500">4x4 Cross-Section (16 Streams)</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION 2: THE SOLUTION -->
+        <section class="glass-panel">
+            <h2>2. Torsion Equalization (The Litz Effect)</h2>
+            <p>To achieve <strong>1:1 Algorithmic Equality</strong>, every stream must travel the exact same physical distance per cycle. We achieve this by applying a calculated <strong>Torsion ($\tau$)</strong> to the stream bundle.</p>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mt-6">
+                <div>
+                    <h3>The Helical Interleave</h3>
+                    <p>We treat the data bus like a <strong>Litz Wire</strong> in electromagnetics. The bundle twists helically as it travels.</p>
+                    <ul class="list-disc pl-5 mt-2 space-y-2 text-sm text-slate-300">
+                        <li>At $t=0$, Stream 1 is on the <strong>Inner</strong> track (Short path).</li>
+                        <li>At $t=\pi$, Stream 1 has rotated to the <strong>Outer</strong> track (Long path).</li>
+                        <li>At $t=2\pi$, Stream 1 returns to start.</li>
+                    </ul>
+                    <p class="mt-4 text-emerald-400 font-bold text-sm">Result: $\int_{0}^{2\pi} L_i(t) dt = \text{Constant for all } i \in [1,16]$.</p>
+                </div>
+                <div>
+                    <h3>Tension Calculation</h3>
+                    <div class="math-block">
+                        $$ \mathcal{T}_{total} = \sum_{i=1}^{16} \left( \kappa_i + \tau_{twist} \right) $$
+                        Condition for Equality:
+                        $$ \sigma^2(\text{PathLength}) \to 0 $$
+                    </div>
+                    <p class="text-sm text-slate-400">By calculating the precise torsion required, we ensure the mechanical tension on every "trace" is identical. This allows for branching without recalculating phase offsets.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION 3: INTERACTIVE VISUALIZATION -->
+        <section class="glass-panel">
+            <h2>3. The Torsion Loom Visualization</h2>
+            <p>Visualizing the 16 streams twisting to equalize path length. Toggle "Torsion" to see the correction.</p>
+            
+            <div class="flex justify-center gap-4 mb-4">
+                <button onclick="setTorsion(true)" class="px-4 py-2 bg-emerald-900/50 text-emerald-300 border border-emerald-600 rounded text-xs hover:bg-emerald-800">ENABLE TORSION (EQUALIZED)</button>
+                <button onclick="setTorsion(false)" class="px-4 py-2 bg-red-900/50 text-red-300 border border-red-600 rounded text-xs hover:bg-red-800">DISABLE TORSION (STRAIGHT)</button>
+            </div>
+
+            <div id="loom-viz">
+                <!-- LEFT: CROSS SECTION -->
+                <div class="relative bg-slate-900 border-r border-slate-700">
+                    <div class="panel-label">CROSS-SECTION (4x4)</div>
+                    <canvas id="canvas-cross"></canvas>
+                </div>
+                
+                <!-- CENTER: 3D BUNDLE -->
+                <div class="relative" id="three-bundle">
+                    <div class="panel-label">3D HELICAL BUNDLE</div>
+                </div>
+                
+                <!-- RIGHT: TENSION MONITOR -->
+                <div class="relative bg-slate-900 border-l border-slate-700">
+                    <div class="panel-label">PATH LENGTH ERROR ($\Delta L$)</div>
+                    <canvas id="canvas-tension"></canvas>
+                </div>
+            </div>
+            
+            <div class="mt-4 p-3 bg-blue-900/20 border border-blue-500/30 rounded text-xs text-center text-blue-200">
+                <strong>System Branching Rule:</strong> A branch can ONLY be generated when the Tension Variance ($\sigma^2$) is effectively zero (Green Bars). Attempting to branch during high variance (Red Bars) creates data corruption.
+            </div>
+        </section>
+
+    </main>
+
+    <!-- VISUALIZATION SCRIPT -->
+    <script>
+    (function() {
+        // --- STATE ---
+        const state = {
+            torsionEnabled: true,
+            torsionSpeed: 0.02,
+            time: 0,
+            streams: 16
+        };
+
+        // --- 1. CROSS SECTION CANVAS ---
+        const cvsCross = document.getElementById('canvas-cross');
+        const ctxCross = cvsCross.getContext('2d');
+
+        function drawCross() {
+            if (cvsCross.width !== cvsCross.clientWidth) {
+                cvsCross.width = cvsCross.clientWidth;
+                cvsCross.height = cvsCross.clientHeight;
+            }
+            const w = cvsCross.width;
+            const h = cvsCross.height;
+            const cx = w/2; 
+            const cy = h/2;
+
+            ctxCross.fillStyle = 'rgba(15, 23, 42, 0.2)';
+            ctxCross.fillRect(0, 0, w, h);
+
+            // Draw 4x4 Grid Rotating
+            const spacing = 15;
+            const offset = 1.5 * spacing;
+            
+            // Rotation angle
+            const angle = state.torsionEnabled ? state.time : 0;
+
+            for(let i=0; i<16; i++) {
+                // Original Grid Pos
+                const col = i % 4;
+                const row = Math.floor(i / 4);
+                let x = (col * spacing) - offset;
+                let y = (row * spacing) - offset;
+
+                // Rotate point
+                const rx = x * Math.cos(angle) - y * Math.sin(angle);
+                const ry = x * Math.sin(angle) + y * Math.cos(angle);
+
+                // Draw Dot
+                ctxCross.beginPath();
+                ctxCross.arc(cx + rx, cy + ry, 4, 0, Math.PI*2);
+                // Color gradient based on index to track mixing
+                const hue = (i / 16) * 360;
+                ctxCross.fillStyle = `hsl(${hue}, 70%, 50%)`;
+                ctxCross.fill();
+            }
+            
+            // Draw "Keystone" Boundary
+            ctxCross.strokeStyle = '#334155';
+            ctxCross.lineWidth = 1;
+            ctxCross.beginPath();
+            ctxCross.arc(cx, cy, 40, 0, Math.PI*2);
+            ctxCross.stroke();
+
+            requestAnimationFrame(drawCross);
+        }
+
+        // --- 2. TENSION MONITOR CANVAS ---
+        const cvsTension = document.getElementById('canvas-tension');
+        const ctxTension = cvsTension.getContext('2d');
+
+        function drawTension() {
+            if (cvsTension.width !== cvsTension.clientWidth) {
+                cvsTension.width = cvsTension.clientWidth;
+                cvsTension.height = cvsTension.clientHeight;
+            }
+            const w = cvsTension.width;
+            const h = cvsTension.height;
+
+            ctxTension.clearRect(0, 0, w, h);
+
+            // Draw Axis
+            ctxTension.strokeStyle = '#334155';
+            ctxTension.beginPath();
+            ctxTension.moveTo(20, h/2); ctxTension.lineTo(w-10, h/2); // Zero line
+            ctxTension.moveTo(20, 10); ctxTension.lineTo(20, h-10); // Y axis
+            ctxTension.stroke();
+
+            // Draw Bars for 16 streams
+            const barW = (w - 40) / 16;
+            
+            for(let i=0; i<16; i++) {
+                // Calculate error
+                // Inner streams (0-3) are negative error, Outer (12-15) are positive without torsion
+                // With torsion, error modulates but averages to 0
+                
+                let error = 0;
+                if (!state.torsionEnabled) {
+                    // Linear error distribution based on "radius" from center of bundle
+                    // Simulating a bend: outer streams stretch, inner compress
+                    const row = Math.floor(i/4); // 0,1,2,3
+                    error = (row - 1.5) * 40; // Static error
+                } else {
+                    // With torsion, error oscillates sinusoidally as they rotate
+                    // effectively cancelling out over time
+                    // We visualize instantaneous error which is small, or accumulated error which is 0
+                    // Let's show instantaneous error reduced drastically
+                    const row = Math.floor(i/4);
+                    // Rotating makes them swap positions
+                    const angle = state.time + (row * Math.PI/2);
+                    error = Math.sin(angle) * 5; // Very small variance
+                }
+
+                const x = 30 + i * barW;
+                const cy = h/2;
+                const barH = error;
+
+                ctxTension.fillStyle = Math.abs(error) > 10 ? '#f87171' : '#34d399';
+                ctxTension.fillRect(x, cy, barW - 2, -barH); // Negative because canvas Y is down
+            }
+            
+            // Label
+            ctxTension.fillStyle = state.torsionEnabled ? '#34d399' : '#f87171';
+            ctxTension.font = '10px monospace';
+            ctxTension.fillText(state.torsionEnabled ? "STATUS: EQUALIZED" : "STATUS: CRITICAL DRIFT", 30, h-10);
+
+            requestAnimationFrame(drawTension);
+        }
+
+        // --- 3. THREE.JS BUNDLE ---
+        function initThree() {
+            const container = document.getElementById('three-bundle');
+            let w = container.clientWidth;
+            let h = container.clientHeight;
+            
+            const scene = new THREE.Scene();
+            scene.background = new THREE.Color(0x000000);
+            
+            const camera = new THREE.PerspectiveCamera(45, w/h, 0.1, 100);
+            camera.position.set(20, 10, 20);
+            camera.lookAt(0,0,0);
+            
+            const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+            renderer.setSize(w, h);
+            container.appendChild(renderer.domElement);
+
+            // --- GEOMETRY GENERATION ---
+            const streamMeshes = [];
+            const pathPoints = [];
+            const steps = 100;
+            const length = 40;
+
+            // Generate central path
+            for(let i=0; i<=steps; i++) {
+                const t = i/steps;
+                pathPoints.push(new THREE.Vector3(
+                    (t-0.5) * length, 
+                    Math.sin(t * Math.PI * 2) * 2, // Slight curve to simulate manifold
+                    0
+                ));
+            }
+            const spineCurve = new THREE.CatmullRomCurve3(pathPoints);
+
+            // Create 16 Tubes
+            for(let i=0; i<16; i++) {
+                const hue = (i/16);
+                const mat = new THREE.MeshBasicMaterial({ color: new THREE.Color().setHSL(hue, 0.8, 0.5) });
+                // We'll update geometry in animate loop for torsion effect
+                // Actually, recreating geometry is expensive. Let's use a shader or simple line rotation.
+                // For this demo, let's use Lines for performance and update positions
+                
+                const geo = new THREE.BufferGeometry();
+                // alloc positions
+                const pos = new Float32Array((steps+1)*3);
+                geo.setAttribute('position', new THREE.BufferAttribute(pos, 3));
+                
+                const line = new THREE.Line(geo, new THREE.LineBasicMaterial({ 
+                    color: new THREE.Color().setHSL(hue, 0.8, 0.5),
+                    linewidth: 2
+                }));
+                scene.add(line);
+                streamMeshes.push({ mesh: line, offsetIndex: i });
+            }
+
+            function animateThree() {
+                requestAnimationFrame(animateThree);
+                
+                if(container.clientWidth !== w || container.clientHeight !== h) {
+                    w = container.clientWidth; h = container.clientHeight;
+                    renderer.setSize(w,h);
+                    camera.aspect = w/h;
+                    camera.updateProjectionMatrix();
+                }
+
+                state.time += state.torsionSpeed;
+
+                // Update Stream Positions
+                streamMeshes.forEach((stream, sIdx) => {
+                    const positions = stream.mesh.geometry.attributes.position.array;
+                    const row = Math.floor(sIdx / 4);
+                    const col = sIdx % 4;
+                    
+                    // Base offset in cross section
+                    const baseX = (col - 1.5) * 0.5;
+                    const baseY = (row - 1.5) * 0.5;
+                    
+                    for(let i=0; i<=steps; i++) {
+                        const t = i/steps;
+                        const point = spineCurve.getPoint(t);
+                        const tangent = spineCurve.getTangent(t);
+                        const normal = new THREE.Vector3(0,1,0).applyAxisAngle(new THREE.Vector3(1,0,0), 0); // Simplified normal
+                        const binormal = new THREE.Vector3().crossVectors(tangent, normal);
+
+                        // Torsion Logic
+                        let twistAngle = 0;
+                        if(state.torsionEnabled) {
+                            twistAngle = t * Math.PI * 8; // 4 full twists along length
+                        }
+
+                        // Rotate the base offset
+                        const rX = baseX * Math.cos(twistAngle) - baseY * Math.sin(twistAngle);
+                        const rY = baseX * Math.sin(twistAngle) + baseY * Math.cos(twistAngle);
+
+                        // Apply to spine frame (Simplified frenet)
+                        const finalX = point.x + binormal.x * rX + normal.x * rY;
+                        const finalY = point.y + binormal.y * rX + normal.y * rY;
+                        const finalZ = point.z + binormal.z * rX + normal.z * rY;
+
+                        positions[i*3] = finalX;
+                        positions[i*3+1] = finalY;
+                        positions[i*3+2] = finalZ;
+                    }
+                    stream.mesh.geometry.attributes.position.needsUpdate = true;
+                });
+
+                // Camera orbit
+                camera.position.x = Math.sin(state.time * 0.2) * 30;
+                camera.position.z = Math.cos(state.time * 0.2) * 30;
+                camera.lookAt(0,0,0);
+
+                renderer.render(scene, camera);
+            }
+            animateThree();
+        }
+
+        // --- EXPORTS ---
+        window.setTorsion = function(val) {
+            state.torsionEnabled = val;
+        };
+
+        // Init
+        drawCross();
+        drawTension();
+        initThree();
+
+    })();
+    </script>
+</body>
+</html>
